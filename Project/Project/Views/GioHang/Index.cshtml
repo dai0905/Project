@@ -1,0 +1,90 @@
+﻿@model List<Project.ViewModels.GioHangItem>
+
+@{
+    ViewData["Title"] = "Giỏ hàng ";
+}
+
+<!-- Cart Page Start -->
+<div class="container-fluid">
+    <div class="container py-5">
+        <form asp-action="CapNhatGioHang" method="post">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="min-width: 100px;">Sản phẩm</th>
+                            <th scope="col" style="min-width: 200px;">Tên điện thoại</th>
+                            <th scope="col" style="min-width: 100px;">Giá</th>
+                            <th scope="col" style="min-width: 100px;">Số lượng</th>
+                            <th scope="col" style="min-width: 100px;">Thành tiền</th>
+                            <th scope="col" style="min-width: 100px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <img src="@Url.Content("~/img/" + (Model[i].HinhAnh ?? "a35_den.jpg"))" class="img-fluid" style="width: 120px; height: 80px;" alt="">
+                                </td>
+                                <td>
+                                    <div>
+                                        <p class="mb-0 mt-3">@Model[i].TenSp</p>
+                                        <p>@Model[i].Mau @Model[i].DungLuongRam/ @Model[i].DungLuong</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="mb-0 mt-4">@($"{Model[i].Gia:N0} Đ")</p>
+                                </td>
+                                <td>
+                                    <div class="input-group mt-4" style="width: 100px;">
+                                        <input type="number" name="items[@i].SoLuong" class="form-control form-control-sm text-center" value="@Model[i].SoLuong" min="1"  max="@Model[i].Sl" oninput="validateInput(this, @Model[i].Sl)">
+
+                                        <input type="hidden" name="items[@i].MaSp" value="@Model[i].MaSp" />
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="mb-0 mt-4">@($"{Model[i].ThanhTien:N0} Đ")</p>
+                                </td>
+                                <td>
+                                    <a asp-action="XoaSP" asp-controller="GioHang" asp-route-MaSp="@Model[i].MaSp" class="btn btn-md rounded-circle bg-light border mt-3">
+                                    <i class="fa fa-times text-danger"></i>
+                                </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4 ms-auto py-4">
+                <div class="d-flex justify-content-between">
+                    <h5>Tổng tiền:</h5>
+                    <p>@($"{Model.Sum(p => p.ThanhTien):N0} Đ")</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col text-center">
+                    <a asp-controller="Home" asp-action="Index" class="btn border-secondary rounded-pill text-primary" style="text-decoration: none;">Tiếp tục mua hàng</a>
+                </div>
+                <div class="col text-center">
+                    <button class="btn border-secondary rounded-pill text-primary" type="submit">Cập nhật</button>
+                </div>
+                <div class="col text-center">
+                    <a asp-action="ThanhToan" asp-controller="GioHang" class="btn border-secondary rounded-pill text-primary">Thanh toán</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Cart Page End -->
+<script>
+    function validateInput(input, max) {
+        if (input.value < 1) {
+            input.value = 1; // Đảm bảo giá trị tối thiểu là 1
+        } else if (input.value > max) {
+            input.value = max; // Đảm bảo giá trị không vượt quá tồn kho
+        }
+    }
+</script>
+

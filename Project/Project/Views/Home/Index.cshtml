@@ -1,0 +1,167 @@
+﻿@model IEnumerable<Project.ViewModels.DienThoaiVM>
+
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<!-- Shop Start-->
+<div class="container py-4">
+    <div class="row g-4">
+        <div class="col-lg-12">
+            <form method="get" action="@Url.Action("Index", "Home")" >
+                <div class="row g-4">
+                    <div class="col-md-5 col-xl-3">
+                        <div class="input-group w-100 mx-auto d-flex">
+                            <input type="search" name="searchTerm" class="form-control p-3" placeholder="Nhập tên sản phẩm" value="@ViewBag.SearchTerm" />
+                            <button class="input-group-text p-3"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Các input ẩn để giữ giá trị bộ lọc -->
+                    @foreach (var brand in ViewBag.SelectedBrands ?? Enumerable.Empty<string>())
+                    {
+                        <input type="hidden" name="thuonghieu" value="@brand" />
+                    }
+                    @foreach (var ram in ViewBag.SelectedRams ?? Enumerable.Empty<string>())
+                    {
+                        <input type="hidden" name="ram" value="@ram" />
+                    }
+                    @foreach (var boNhoTrong in ViewBag.SelectedBoNhoTrongs ?? Enumerable.Empty<string>())
+                    {
+                        <input type="hidden" name="boNhoTrong" value="@boNhoTrong" />
+                    }
+                    @foreach (var gia in ViewBag.SelectedGias ?? Enumerable.Empty<string>())
+                    {
+                        <input type="hidden" name="gia" value="@gia" />
+                    }
+
+                    <div class="col-md-2 col-xl-6"></div>
+                    <div class="col-md-5 col-xl-3">
+                        <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
+                            <label for="sx">Sắp xếp theo:</label>
+                            <select id="sx" name="sortOrder" class="border-0 form-select-sm bg-light me-3" onchange="this.form.submit()">
+                                <option value="" selected="@(ViewBag.SortOrder == null)">Mặc định</option>
+                                <option value="price_asc" selected="@(ViewBag.SortOrder == "price_asc")">Giá thấp -> cao</option>
+                                <option value="price_desc" selected="@(ViewBag.SortOrder == "price_desc")">Giá cao -> thấp</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="row g-4">
+                <div class="col-lg-3">
+                    <form method="get" action="@Url.Action("Index", "Home")" id="filterForm">
+                        <div class="row g-4">
+                            <!-- Component cho Thương hiệu -->
+                            @await Component.InvokeAsync("ThuongHieu")
+
+                            <!-- Component cho RAM -->
+                            @await Component.InvokeAsync("Ram")
+
+                            <!-- Component cho Bộ nhớ trong -->
+                            @await Component.InvokeAsync("BoNhoTrong")
+
+                            <div class="col-6 col-lg-12">
+                                <div class="mb-3">
+                                    <h4>Giá</h4>
+                                    <div class="mb-2">
+                                        <input type="checkbox" class="me-2" id="Categories-1" name="Gia" value="duoi-10-trieu"
+                                        @(ViewBag.SelectedGias != null && ((string[])ViewBag.SelectedGias).Contains("duoi-10-trieu") ? "checked" : "") />
+                                        <label for="Categories-1"> Dưới 10 triệu</label>
+                                    </div>
+                                    <div class="mb-2">
+                                        <input type="checkbox" class="me-2" id="Categories-2" name="Gia" value="tu-10-den-20-trieu"
+                                        @(ViewBag.SelectedGias != null && ((string[])ViewBag.SelectedGias).Contains("tu-10-den-20-trieu") ? "checked" : "") />
+                                        <label for="Categories-2"> Từ 10 triệu - 20 triệu</label>
+                                    </div>
+                                    <div class="mb-2">
+                                        <input type="checkbox" class="me-2" id="Categories-3" name="Gia" value="tren-20-trieu"
+                                        @(ViewBag.SelectedGias != null && ((string[])ViewBag.SelectedGias).Contains("tren-20-trieu") ? "checked" : "") />
+                                        <label for="Categories-3"> Trên 20 triệu</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container d-flex">
+                                <input type="reset" onclick="clearFilters()" value="Bỏ lọc" class="mx-5 my-4">  
+                                <input type="submit" value="Lọc" class="my-4">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-9">
+                    <div class="row g-4 justify-content-center">
+                        @if (!Model.Any()) // Kiểm tra nếu không có sản phẩm nào trong Model
+                        {
+                            <div class="col-12 text-center">
+                                <h4>Không tìm thấy sản phẩm nào</h4>
+                            </div>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <div class="col-md-6 col-lg-6 col-xl-4">
+                                    <div class="rounded position-relative border sp-item">
+                                        <div class="sp-img">
+                                            <a href="@Url.Action("CTDienThoai", "Home", new { id = item.MaSp })">
+                                                <img src="@Url.Content("~/img/" + (item.HinhAnh ?? "a35_den.jpg"))" class="img-fluid w-100" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="p-4">
+                                            <h5>@item.TenSp</h5>
+                                            <p>@item.Mau @item.DungLuongRam/ @item.DungLuong</p>
+                                            <h5 style="color: red;">@($"{item.GiaMoi:N0} Đ")</h5>
+                                            <p><del>@($"{item.GiaCu:N0} Đ")</del></p>
+                                            <a asp-action="ThemVaoGioHang" asp-controller="GioHang" asp-route-id="@item.MaSp" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="col-12">
+                                <div class="pagination d-flex justify-content-center mt-3">
+                                    @if (ViewBag.CurrentPage > 1)
+                                    {
+                                        <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, searchTerm = ViewBag.SearchTerm, sortOrder = ViewBag.SortOrder, thuonghieu = ViewBag.SelectedBrands, ram = ViewBag.SelectedRams, boNhoTrong = ViewBag.SelectedBoNhoTrongs, gia = ViewBag.SelectedGias })" class="rounded">&laquo;</a>
+                                    }
+
+                                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                    {
+                                        <a href="@Url.Action("Index", new { page = i, searchTerm = ViewBag.SearchTerm, sortOrder = ViewBag.SortOrder, thuonghieu = ViewBag.SelectedBrands, ram = ViewBag.SelectedRams, boNhoTrong = ViewBag.SelectedBoNhoTrongs, gia = ViewBag.SelectedGias })" class="rounded @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                                    }
+
+                                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                                    {
+                                        <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, searchTerm = ViewBag.SearchTerm, sortOrder = ViewBag.SortOrder, thuonghieu = ViewBag.SelectedBrands, ram = ViewBag.SelectedRams, boNhoTrong = ViewBag.SelectedBoNhoTrongs, gia = ViewBag.SelectedGias })" class="rounded">&raquo;</a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<!-- Shop End-->
+
+<script>
+    function clearFilters() {
+        // Reset tất cả checkbox
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = false; // Bỏ chọn tất cả checkbox
+        });
+
+        // Reset trường tìm kiếm
+        var searchInput = document.querySelector('input[name="searchTerm"]');
+        if (searchInput) {
+            searchInput.value = ''; // Xóa giá trị tìm kiếm
+        }
+
+        // Chuyển về trang chủ
+        window.location.href = '@Url.Action("Index", "Home")';
+    }
+
+
+</script>

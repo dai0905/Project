@@ -1,0 +1,100 @@
+﻿@model IEnumerable<Project.ViewModels.GioHangItem>
+
+@{
+    ViewData["Title"] = "ThanhToan";
+}
+
+<!-- Thanh toán Start -->
+<div class="container-fluid">
+    <div class="container py-5">
+        <h1 class="mb-4">Chi tiết thanh toán</h1>
+        <form asp-action="ThanhToan" asp-controller="GioHang" method="post">
+            <div class="row g-5">
+                <div class="col-md-12 col-lg-6 col-xl-5 pe-5">
+                    <div>
+                        <label class="form-label my-3">Họ và tên:</label>
+                        <input type="text" class="form-control" name="HoTen" value="@ViewBag.HoTen" readonly>
+                    </div>
+                    <div>
+                        <label class="form-label my-3">Địa chỉ nhận hàng:</label>
+                        <input type="text" class="form-control" name="DiaChi" value="@ViewBag.DiaChi" readonly>
+                    </div>
+                    <div>
+                        <label class="form-label my-3">Số điện thoại:</label>
+                        <input type="text" class="form-control" name="DienThoai" value="@ViewBag.Sdt" readonly>
+                    </div>
+                    <div>
+                        <label class="form-label my-3">Phương thức thanh toán<sup>*</sup></label>
+                        <input type="text" class="form-control" value="Thanh toán khi nhận hàng" readonly>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6 col-xl-7">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="min-width: 100px;">Sản phẩm</th>
+                                    <th scope="col" style="min-width: 200px;">Tên điện thoại</th>
+                                    <th scope="col" style="min-width: 100px;">Giá</th>
+                                    <th scope="col" style="min-width: 100px;">Số lượng</th>
+                                    <th scope="col" style="min-width: 100px;">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Count(); i++)
+                                {
+                                    var item = Model.ElementAt(i);
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="d-flex align-items-center mt-2">
+                                                <img src="@Url.Content("~/img/" + (item.HinhAnh ?? "a35_den.jpg"))" class="img-fluid" style="width: 120px; height: 80px;" alt="">
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <div>
+                                                <p class="mb-0 mt-3">@item.TenSp</p>
+                                                <p>@item.Mau @item.DungLuongRam / @item.DungLuong</p>
+                                            </div>
+                                        </td>
+                                        <td class="py-5">@($"{item.Gia:N0} Đ")</td>
+                                        <td class="py-5 text-center">@item.SoLuong</td>
+                                        <td class="py-5">@($"{item.ThanhTien:N0} Đ")</td>
+                                    </tr>
+                                    <input type="hidden" name="items[@i].MaSp" value="@item.MaSp" />
+                                    <input type="hidden" name="items[@i].HinhAnh" value="@item.HinhAnh" />
+                                    <input type="hidden" name="items[@i].TenSp" value="@item.TenSp" />
+                                    <input type="hidden" name="items[@i].Mau" value="@item.Mau" />
+                                    <input type="hidden" name="items[@i].DungLuong" value="@item.DungLuong" />
+                                    <input type="hidden" name="items[@i].DungLuongRam" value="@item.DungLuongRam" />
+                                    <input type="hidden" name="items[@i].SoLuong" value="@item.SoLuong" />
+                                    <input type="hidden" name="items[@i].Gia" value="@item.Gia" />
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="bg-light rounded">
+                        <div class="p-4">
+                            <div class="d-flex justify-content-between mb-4">
+                                <h5 class="mb-0 me-4">Tạm tính:</h5>
+                                <p class="mb-0">@($"{Model.Sum(p => p.ThanhTien):N0} Đ")</p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <h5 class="mb-0 me-4">Phí giao hàng:</h5>
+                                <div class="">
+                                    <p class="mb-0">Miễn phí</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
+                            <h5 class="mb-0 ps-4 me-4">Tổng tiền:</h5>
+                            <p class="mb-0 pe-4">@($"{Model.Sum(p => p.ThanhTien):N0} Đ")</p>
+                        </div>
+                    </div>
+                    <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                        <button type="submit" class="btn border-secondary py-3 px-4 w-100 text-primary">ĐẶT HÀNG</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

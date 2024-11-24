@@ -1,0 +1,88 @@
+﻿@model Project.ViewModels.ThongTinCaNhanVM
+
+<!--offcanvas start-->
+<div class="offcanvas offcanvas-start" id="demo" style="width: 250px;">
+    <div class="offcanvas-header">
+        <h1 class="offcanvas-title"></h1>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <nav class="navbar">
+            <div class="navbar-nav pt-4">
+                <a asp-action="ThongTinCaNhan" asp-controller="TaiKhoan" class="nav-item nav-link rounded-pill">
+                    <i class="fas fa-user fa-2x"></i>
+                    <span>Thông tin tài khoản</span>
+                </a>
+                <a asp-action="TheoDoiDonHang" asp-controller="DonHang" class="nav-item nav-link">
+                    <i class="fas fa-clipboard-list fa-2x"></i>
+                    <span>Đơn hàng</span>
+                </a>
+                <a asp-action="ThayDoiMatKhau" asp-controller="TaiKhoan" class="nav-item nav-link">
+                    <i class="fas fa-key fa-2x"></i>
+                    <span>Đổi mật khẩu</span>
+                </a>
+                <a asp-action="DangXuat" asp-controller="TaiKhoan" class="nav-item nav-link">
+                    <i class="fas fa-sign-out-alt fa-2x"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+</div>
+<!--offcanvas end-->
+
+<div class="container-fluid row">
+    <div class="col-xl-2 d-none d-xl-block border">
+        <nav class="navbar">
+            <div class="navbar-nav py-4">
+                <a asp-action="ThongTinCaNhan" asp-controller="TaiKhoan" class="nav-item nav-link rounded-pill">
+                    <i class="fas fa-user fa-2x"></i>
+                    <span>Thông tin tài khoản</span>
+                </a>
+                <a asp-action="TheoDoiDonHang" asp-controller="DonHang" class="nav-item nav-link">
+                    <i class="fas fa-clipboard-list fa-2x"></i>
+                    <span>Đơn hàng</span>
+                </a>
+                <a asp-action="ThayDoiMatKhau" asp-controller="TaiKhoan" class="nav-item nav-link">
+                    <i class="fas fa-key fa-2x"></i>
+                    <span>Đổi mật khẩu</span>
+                </a>
+                <a asp-action="DangXuat" asp-controller="TaiKhoan" class="nav-item nav-link">
+                    <i class="fas fa-sign-out-alt fa-2x"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+    <div class="col-xl-10">
+        <div class="container my-5">
+            <h1 class="text-center mb-4">Sửa thông tin cá nhân</h1>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <form asp-action="SuaThongTin" asp-controller="TaiKhoan" method="post">
+                        <input type="hidden" asp-for="MaTaiKhoan" />
+                        <div class="form-group">
+                            <label asp-for="Ten" class="form-label"></label>
+                            <input asp-for="Ten" class="form-control" />
+                            <span asp-validation-for="Ten" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Sdt" class="form-label"></label>
+                            <input asp-for="Sdt" class="form-control" />
+                            <span asp-validation-for="Sdt" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="DiaChi" class="form-label"></label>
+                            <input asp-for="DiaChi" class="form-control" />
+                            <span asp-validation-for="DiaChi" class="text-danger"></span>
+                        </div>
+                        <div class="d-flex">
+                            <button type="submit" class="btn btn-primary w-100 me-5">Cập nhật</button>
+                            <a asp-action="ThongTinCaNhan" asp-controller="TaiKhoan" class="btn btn-secondary w-100">Quay lại</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

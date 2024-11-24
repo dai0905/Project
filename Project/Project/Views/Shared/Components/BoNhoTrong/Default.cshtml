@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Project.ViewModels.BoNhoTrongVM>
+
+<div class="col-6 col-lg-12">
+    <div class="mb-3">
+        <h4>Bộ nhớ trong</h4>
+        @foreach (var item in Model)
+        {
+            <div class="mb-2">
+                <input type="checkbox" class="me-2" id="boNhoTrong-@item.MaBoNhoTrong" name="boNhoTrong" value="@item.DungLuong"
+                @(ViewBag.SelectedBoNhoTrongs != null && ((string[])ViewBag.SelectedBoNhoTrongs).Contains(item.DungLuong) ? "checked" : "") />
+                <label for="boNhoTrong-@item.MaBoNhoTrong">@item.DungLuong</label>
+            </div>
+        }
+    </div>
+</div>
