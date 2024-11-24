@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Project.ViewModels.RamVM>
+
+<div class="col-6 col-lg-12">
+    <div class="mb-3">
+        <h4>RAM</h4>
+        @foreach (var item in Model)
+        {
+            <div class="mb-2">
+                <input type="checkbox" class="me-2" id="ram-@item.MaRam" name="ram" value="@item.DungLuong"
+                @(ViewBag.SelectedRams != null && ((string[])ViewBag.SelectedRams).Contains(item.DungLuong) ? "checked" : "") />
+                <label for="ram-@item.MaRam">@item.DungLuong</label>
+            </div>
+        }
+    </div>
+</div>

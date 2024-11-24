@@ -1,0 +1,45 @@
+<!DOCTYPE html>  
+<html lang="vi">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Input Number with Increment/Decrement Buttons</title>  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">  
+    <style> 
+        /* Ẩn nút tăng giảm cho input kiểu number */  
+        input[type="number"]::-webkit-inner-spin-button,  
+        input[type="number"]::-webkit-outer-spin-button {  
+            -webkit-appearance: none;  
+            margin: 0;  
+        }  
+    </style>  
+</head>  
+<body>  
+
+<div class="input-group">  
+    <button class="btn btn-sm btn-minus" id="btnGiam"><i class="fa fa-minus"></i></button>  
+    <input id="valueBtn" type="number" value="1" min="0">  
+    <button class="btn btn-sm btn-plus" id="btnTang"><i class="fa fa-plus"></i></button>  
+</div>  
+
+<script>  
+    let value = 1; // Giá trị ban đầu  
+    const updateDisplay = () => {  
+        document.getElementById('valueBtn').value = value;  
+    };  
+
+    document.getElementById('btnTang').addEventListener('click', () => {  
+        value += 1; // Tăng giá trị lên 1  
+        updateDisplay(); // Cập nhật hiển thị  
+    });  
+
+    document.getElementById('btnGiam').addEventListener('click', () => {  
+        if (value > 0) value -= 1; // Giảm giá trị nếu lớn hơn 0  
+        updateDisplay(); // Cập nhật hiển thị  
+    });  
+
+    updateDisplay(); // Hiển thị giá trị ban đầu  
+</script>  
+
+</body>  
+</html>
