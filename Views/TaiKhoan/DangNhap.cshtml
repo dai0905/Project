@@ -1,0 +1,34 @@
+﻿@model Project.ViewModels.DangNhapVM
+
+@{
+    ViewData["Title"] = "Đăng Nhập";
+}
+
+<!-- Bắt đầu đăng nhập -->
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Đăng Nhập</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <!-- Hiển thị lỗi tổng quát nếu có -->
+            <div asp-validation-summary="ModelOnly" class="text-danger text-center"></div>
+
+            <form asp-action="DangNhap" asp-route-returnurl="@ViewBag.ReturnUrl" method="post">
+                <div class="form-group">
+                    <label asp-for="MaTaiKhoan"></label>
+                    <input type="text" class="form-control" asp-for="MaTaiKhoan" />
+                    <span asp-validation-for="MaTaiKhoan" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MatKhau"></label>
+                    <input type="password" class="form-control" asp-for="MatKhau" />
+                    <span asp-validation-for="MatKhau" class="text-danger"></span>
+                </div>
+                <div class="d-flex">
+                    <button type="submit" class="btn btn-primary w-100 me-5">Đăng Nhập</button>
+                    <a asp-action="DangKy" asp-controller="TaiKhoan" class="btn btn-secondary w-100">Đăng Ký</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Kết thúc đăng nhập -->
