@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Project.ViewModels.DienThoaiVM>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Danh sách sản phẩm</h1>
+
+<p>
+    <a asp-controller="DienThoais" asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MaSp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TenSp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GiaMoi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GiaCu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HinhAnh)
+            </th>
+            <th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <th>
+                @Html.DisplayFor(modelItem => item.MaSp)
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenSp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GiaMoi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GiaCu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HinhAnh)
+            </td>
+            <td>
+                <a asp-controller="DienThoais" asp-action="Edit" asp-route-id="@item.MaSp">Edit</a> |
+                <a asp-controller="DienThoais" asp-action="Details" asp-route-id="@item.MaSp">Details</a> |
+                <a asp-controller="DienThoais" asp-action="Delete" asp-route-id="@item.MaSp">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div class="col-12">
+    <div class="pagination d-flex justify-content-center mt-3">
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <a href="@Url.Action("Index", new { page = 1})" class="rounded">&laquo;</a>
+        }
+
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <a href="@Url.Action("Index", new { page = i })" class="rounded @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+        }
+
+        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+        {
+            <a href="@Url.Action("Index", new { page = ViewBag.TotalPages })" class="rounded">&raquo;</a>
+        }
+    </div>
+</div>

@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="~/css/style.css" rel="stylesheet">
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+</head>
+<body>
+    <div>
+        <!-- Navbar start -->
+        <div class="container-fluid bg-white" style="position: sticky; top: 0; z-index: 1000;">
+            <div class="container mt-3">
+                <nav class="navbar navbar-light bg-white navbar-expand-xl">
+                    <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
+                        <span class="fa fa-bars text-primary"></span>
+                    </button>
+                    <a asp-controller="Home" asp-action="Index" class="navbar-brand"><h1 class="text-primary display-6">SHOP ĐCHPH</h1></a>
+                    <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <span class="fa fa-bars text-primary"></span>
+                    </button>
+                    <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
+                        <div class="navbar-nav mx-auto">
+                            <a asp-controller="Home" asp-action="Index" asp-route-thuonghieu="apple" class="nav-item nav-link">Apple</a>
+                            <a asp-controller="Home" asp-action="Index" asp-route-thuonghieu="samsung" class="nav-item nav-link">Samsung</a>
+                            <a asp-controller="Home" asp-action="Index" asp-route-thuonghieu="xiaomi" class="nav-item nav-link">Xiaomi</a>
+                        </div>
+                        <div class="d-flex m-3 me-0">
+                            <!-- Thêm phần tìm kiếm vào đây -->
+                            <form asp-action="Index" asp-controller="Home" method="get" class="form-inline my-2 my-lg-0 me-4">
+                                <div class="input-group d-flex">
+                                    <!-- Ô tìm kiếm luôn trống -->
+                                    <input type="search" class="form-control" placeholder="Nhập từ khóa" name="searchTerm" value="" />
+
+                                    <!-- Input ẩn giữ giá trị tìm kiếm -->
+                                    @if (!string.IsNullOrEmpty(ViewBag.SearchTerm))
+                                    {
+                                        <input type="hidden" name="searchTerm" value="@ViewBag.SearchTerm" />
+                                    }
+
+                                    <button class="input-group-text" type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+
+                            @await Component.InvokeAsync("GioHang")
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a asp-controller="TaiKhoan" asp-action="ThongTinCaNhan" class="my-auto">
+                                    <i class="fas fa-user fa-2x"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="TaiKhoan" asp-action="DangNhap" class="my-auto">
+                                    <i class="fas fa-user fa-2x"></i>
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- Navbar End -->
+
+        @RenderBody()
+        @RenderSection("Scripts", required: false)
+
+
+        <div style="height: 80px;"></div> 
+        @await Html.PartialAsync("_Footer")
+    </div>
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
+
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+﻿@model Project.Data.DienThoai
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Details</h1>
+<div>
+    <h4>DienThoai</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MaSp)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaSp)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TenSp)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TenSp)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.HeDieuHanh)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.HeDieuHanh)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CameraTruoc)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CameraTruoc)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CameraSau)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CameraSau)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ManHinh)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ManHinh)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Cpu)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Cpu)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Pin)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Pin)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ChatLieu)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ChatLieu)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ktkl)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ktkl)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Tdrm)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Tdrm)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Sl)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Sl)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.GiaMoi)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.GiaMoi)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.GiaCu)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.GiaCu)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MoTa)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MoTa)
+        </dd>
+        
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HinhAnh)
+        </dt>
+        <dd class="col-sm-10">
+            <img src="~/img/@Model.HinhAnh" style="width: 210px; height: 140px;" alt="" />
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AnhThongSo)
+        </dt>
+        <dd class="col-sm-10">
+            <img src="~/img/@Model.AnhThongSo" style="width: 210px; height: 140px;" alt="" />
+        </dd>
+        
+        <dt class = "col-sm-2">
+            Bộ nhớ trong
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MaBoNhoTrongNavigation.DungLuong)
+        </dd>
+        <dt class = "col-sm-2">
+            Màu
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MaMauNavigation.TenMau)
+        </dd>
+        <dt class = "col-sm-2">
+            Ram
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MaRamNavigation.DungLuong)
+        </dd>
+        <dt class = "col-sm-2">
+            Thương hiệu
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MaThuongHieuNavigation.TenThuongHieu)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-controller="DienThoais" asp-action="Edit" asp-route-id="@Model?.MaSp">Edit</a> |
+    <a asp-controller="DienThoais" asp-action="Index">Back to List</a>
+</div>

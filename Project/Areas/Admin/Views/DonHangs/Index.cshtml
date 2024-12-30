@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Project.ViewModels.DonHangVM>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<form asp-controller="DonHangs" asp-action="Index" method="get">
+    <label for="sx">Tìm kiếm theo Trạng Thái:</label>
+    <select id="sx" name="maTT" class="border-0 form-select-sm bg-light me-3" onchange="this.form.submit()">
+        <option value="o" >Tất cả</option>
+        @foreach (var item in ViewBag.TrangThai){
+            <option value="@item.Value" selected="@(ViewBag.SelectedStatusId == item.Value)">@item.Text</option>
+        }
+    </select>
+</form>
+
+<div class="container-fluid">
+    <div class="container py-5">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Mã đơn hàng</th>
+                        <th scope="col">Ngày đặt</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col">Vận chuyển</th>
+                        <th scope="col">Tổng tiền</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var donHang in Model)
+                    {
+                        <tr>
+                            <td><p class="pt-3">@donHang.MaHd</p></td>
+                            <td><p class="pt-3">@donHang.NgayBan.ToString("dd/MM/yyyy")</p></td>
+                            @* <td><p class="pt-3">@donHang.TrangThai</p></td> *@
+                            <td>
+                                <form asp-controller="DonHangs" asp-action="Edit" asp-route-maHd="@donHang.MaHd" method="post">
+                                    <select name="maTT" class="border-0 form-select-sm bg-light me-3" onchange="this.form.submit()">
+                                        @foreach (var item in ViewBag.TrangThai)
+                                        {
+                                            <option value="@item.Value" selected="@(donHang.MaTrangThai == item.Value)">@item.Text</option>
+                                        }
+                                    </select>
+                                </form>
+                            </td>
+                            <td><p class="pt-3">GHTK</p></td> <!-- Replace with actual delivery service if needed -->
+                            <td><p class="pt-3">@($"{donHang.TongTien:N0} Đ")</p></td>
+                            <td>
+                                <a asp-action="Details" asp-controller="DonHangs" asp-route-maHd="@donHang.MaHd" class="nav-item nav-link pt-3">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>Chi tiết</span>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

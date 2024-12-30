@@ -1,0 +1,100 @@
+﻿@model Project.ViewModels.TaiKhoanVM
+@{
+    ViewData["Title"] = "ThongTinCaNhan";
+}
+
+<!--offcanvas start-->
+<div class="offcanvas offcanvas-start" id="demo" style="width: 250px;">
+    <div class="offcanvas-header">
+        <h1 class="offcanvas-title"></h1>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <nav class="navbar">
+            <div class="navbar-nav pt-4">
+                <a asp-action="ThongTinCaNhan" asp-controller="TaiKhoan" class="nav-item nav-link rounded-pill">
+                    <i class="fas fa-user fa-2x"></i>
+                    <span>Thông tin tài khoản</span>
+                </a>
+                <a asp-action="TheoDoiDonHang" asp-controller="DonHang" class="nav-item nav-link">
+                    <i class="fas fa-clipboard-list fa-2x"></i>
+                    <span>Đơn hàng</span>
+                </a>
+                <a asp-action="ThayDoiMatKhau" asp-controller="TaiKhoan" class="nav-item nav-link">
+                    <i class="fas fa-key fa-2x"></i>
+                    <span>Đổi mật khẩu</span>
+                </a>
+                <a asp-action="DangXuat" asp-controller="TaiKhoan" class="nav-item nav-link">
+                    <i class="fas fa-sign-out-alt fa-2x"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+</div>
+<!--offcanvas end-->
+<div class="container-fluid row">
+    <div class="col-xl-2 d-none d-xl-block border">
+        <nav class="navbar">
+            <div class="navbar-nav py-4">
+                <a asp-action="ThongTinCaNhan" asp-controller="TaiKhoan" class="nav-item nav-link rounded-pill">
+                    <i class="fas fa-user fa-2x"></i>
+                    <span>Thông tin tài khoản</span>
+                </a>
+                <a asp-action="TheoDoiDonHang" asp-controller="DonHang" class="nav-item nav-link">
+                    <i class="fas fa-clipboard-list fa-2x"></i>
+                    <span>Đơn hàng</span>
+                </a>
+                <a asp-action="ThayDoiMatKhau" asp-controller="TaiKhoan" class="nav-item nav-link">
+                    <i class="fas fa-key fa-2x"></i>
+                    <span>Đổi mật khẩu</span>
+                </a>
+                <a asp-action="DangXuat" asp-controller="TaiKhoan" class="nav-item nav-link">
+                    <i class="fas fa-sign-out-alt fa-2x"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+    <div class="col-xl-10">
+        <div class="container my-5">
+            <h1 class="text-center mb-4">Thông tin cá nhân</h1>
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div id="successMessage" class="alert alert-success mt-3"> @TempData["SuccessMessage"] </div>
+            } @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger mt-3">@TempData["ErrorMessage"]</div>
+            }
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label>Họ và tên:</label>
+                        <input type="text" class="form-control" value="@Model.Ten" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Số điện thoại:</label>
+                        <input type="tel" class="form-control" value="@Model.Sdt" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Địa chỉ:</label>
+                        <input type="text" class="form-control" value="@Model.DiaChi" readonly>
+                    </div>
+                    <a asp-action="SuaThongTin" asp-controller="TaiKhoan" class="btn btn-primary w-100">Sửa</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    window.setTimeout(function ()
+    {
+        var messageElement = document.getElementById('successMessage');
+        if (messageElement)
+        {
+            messageElement.style.display = 'none';
+        }
+    }, 3000);
+</script>
+
+

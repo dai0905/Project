@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Project.Data.TaiKhoan>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<a asp-controller="TaiKhoans" asp-action="Create">Create</a>
+<p>@TempData["Message"]</p>
+
+<div class="container-fluid">
+    <div class="container py-5">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Mã tài khoản</th>
+                        <th scope="col">Mật khẩu</th>
+                        <th scope="col">Tên quyền</th>
+                        <th scope="col">Tên</th>
+                        <th scope="col">Địa chỉ</th>
+                        <th scope="col">Số điện thoại</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var tk in Model)
+                    {
+                        <tr>
+                            <td><p class="pt-3">@tk.MaTaiKhoan</p></td>
+                            <td><p class="pt-3">@tk.MatKhau</p></td>
+                            <td>
+                                <form asp-controller="TaiKhoans" asp-action="Edit" asp-route-maTk="@tk.MaTaiKhoan" method="post">
+                                    <select name="maQuyen" class="border-0 form-select-sm bg-light me-3" onchange="this.form.submit()">
+                                        @foreach (var item in ViewBag.Quyen)
+                                        {
+                                            <option value="@item.Value" selected="@(tk.MaQuyen.ToString() == item.Value)">@item.Text</option>
+                                        }
+                                    </select>
+                                </form>
+                            </td>
+                            <td><p class="pt-3">@tk.Ten</p></td>
+                            <td><p class="pt-3">@tk.DiaChi</p></td>
+                            <td><p class="pt-3">@tk.Sdt</p></td>
+                            <td>
+                                <a asp-controller="TaiKhoans" asp-action="Delete" asp-route-maTk="@tk.MaTaiKhoan" class="nav-item nav-link pt-3">
+                                    @* <i class="fas fa-info-circle"></i> *@
+                                    <span>Delete</span>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

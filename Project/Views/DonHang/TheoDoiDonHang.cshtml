@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Project.ViewModels.DonHangVM>
+
+<!--offcanvas start-->
+<div class="offcanvas offcanvas-start" id="demo" style="width: 250px;">
+    <div class="offcanvas-header">
+        <h1 class="offcanvas-title"></h1>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <nav class="navbar">
+            <div class="navbar-nav pt-4">
+                <a asp-action="ThongTinCaNhan" asp-controller="TaiKhoan" class="nav-item nav-link rounded-pill">
+                    <i class="fas fa-user fa-2x"></i>
+                    <span>Thông tin tài khoản</span>
+                </a>
+                <a asp-action="TheoDoiDonHang" asp-controller="DonHang" class="nav-item nav-link">
+                    <i class="fas fa-clipboard-list fa-2x"></i>
+                    <span>Đơn hàng</span>
+                </a>
+                <a asp-action="ThayDoiMatKhau" asp-controller="TaiKhoan" class="nav-item nav-link">
+                    <i class="fas fa-key fa-2x"></i>
+                    <span>Đổi mật khẩu</span>
+                </a>
+                <a asp-action="DangXuat" asp-controller="TaiKhoan" class="nav-item nav-link">
+                    <i class="fas fa-sign-out-alt fa-2x"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+</div>
+<!--offcanvas end-->
+
+<div class="container-fluid row">
+    <div class="col-xl-2 d-none d-xl-block border">
+        <nav class="navbar">
+            <div class="navbar-nav py-4">
+                <a asp-action="ThongTinCaNhan" asp-controller="TaiKhoan" class="nav-item nav-link rounded-pill">
+                    <i class="fas fa-user fa-2x"></i>
+                    <span>Thông tin tài khoản</span>
+                </a>
+                <a asp-action="TheoDoiDonHang" asp-controller="DonHang" class="nav-item nav-link">
+                    <i class="fas fa-clipboard-list fa-2x"></i>
+                    <span>Đơn hàng</span>
+                </a>
+                <a asp-action="ThayDoiMatKhau" asp-controller="TaiKhoan" class="nav-item nav-link">
+                    <i class="fas fa-key fa-2x"></i>
+                    <span>Đổi mật khẩu</span>
+                </a>
+                <a asp-action="DangXuat" asp-controller="TaiKhoan" class="nav-item nav-link">
+                    <i class="fas fa-sign-out-alt fa-2x"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+    <div class="col-xl-10">
+        <div class="container-fluid">
+            <div class="container py-5">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Mã đơn hàng</th>
+                                <th scope="col">Ngày đặt</th>
+                                <th scope="col">Trạng thái</th>
+                                <th scope="col">Vận chuyển</th>
+                                <th scope="col">Tổng tiền</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var donHang in Model)
+                            {
+                                <tr>
+                                    <td><p class="pt-3">@donHang.MaHd</p></td>
+                                    <td><p class="pt-3">@donHang.NgayBan.ToString("dd/MM/yyyy")</p></td>
+                                    <td><p class="pt-3">@donHang.TrangThai</p></td>
+                                    <td><p class="pt-3">GHTK</p></td> <!-- Replace with actual delivery service if needed -->
+                                    <td><p class="pt-3">@($"{donHang.TongTien:N0} Đ")</p></td>
+                                    <td>
+                                        <a asp-action="ChiTietDonHang" asp-controller="DonHang" asp-route-maHd="@donHang.MaHd" class="nav-item nav-link pt-3">
+                                            <i class="fas fa-info-circle"></i>
+                                            <span>Chi tiết</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

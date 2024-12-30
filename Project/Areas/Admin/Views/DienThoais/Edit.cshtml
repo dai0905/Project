@@ -1,0 +1,157 @@
+﻿@model Project.Data.DienThoai
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>DienThoai</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="DienThoais" asp-action="Edit" asp-route-id="@Model.MaSp" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MaSp" class="control-label"></label>
+                <input asp-for="MaSp" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label asp-for="TenSp" class="control-label"></label>
+                <input asp-for="TenSp" class="form-control" />
+                <span asp-validation-for="TenSp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaThuongHieu" class="control-label"></label>
+                <select asp-for="MaThuongHieu" class="form-control" asp-items="ViewBag.MaThuongHieu"></select>
+                <span asp-validation-for="MaThuongHieu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HeDieuHanh" class="control-label"></label>
+                <input asp-for="HeDieuHanh" class="form-control" />
+                <span asp-validation-for="HeDieuHanh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CameraTruoc" class="control-label"></label>
+                <input asp-for="CameraTruoc" class="form-control" />
+                <span asp-validation-for="CameraTruoc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CameraSau" class="control-label"></label>
+                <input asp-for="CameraSau" class="form-control" />
+                <span asp-validation-for="CameraSau" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ManHinh" class="control-label"></label>
+                <input asp-for="ManHinh" class="form-control" />
+                <span asp-validation-for="ManHinh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaBoNhoTrong" class="control-label"></label>
+                <select asp-for="MaBoNhoTrong" class="form-control" asp-items="ViewBag.MaBoNhoTrong"></select>
+                <span asp-validation-for="MaBoNhoTrong" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaRam" class="control-label"></label>
+                <select asp-for="MaRam" class="form-control" asp-items="ViewBag.MaRam"></select>
+                <span asp-validation-for="MaRam" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cpu" class="control-label"></label>
+                <input asp-for="Cpu" class="form-control" />
+                <span asp-validation-for="Cpu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Pin" class="control-label"></label>
+                <input asp-for="Pin" class="form-control" />
+                <span asp-validation-for="Pin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChatLieu" class="control-label"></label>
+                <input asp-for="ChatLieu" class="form-control" />
+                <span asp-validation-for="ChatLieu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ktkl" class="control-label"></label>
+                <input asp-for="Ktkl" class="form-control" />
+                <span asp-validation-for="Ktkl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tdrm" class="control-label"></label>
+                <input asp-for="Tdrm" class="form-control" />
+                <span asp-validation-for="Tdrm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaMau" class="control-label"></label>
+                <select asp-for="MaMau" class="form-control" asp-items="ViewBag.MaMau"></select>
+                <span asp-validation-for="MaMau" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sl" class="control-label"></label>
+                <input asp-for="Sl" class="form-control" />
+                <span asp-validation-for="Sl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GiaMoi" class="control-label"></label>
+                <input asp-for="GiaMoi" class="form-control" />
+                <span asp-validation-for="GiaMoi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GiaCu" class="control-label"></label>
+                <input asp-for="GiaCu" class="form-control" />
+                <span asp-validation-for="GiaCu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MoTa" class="control-label"></label>
+                <input asp-for="MoTa" class="form-control" />
+                <span asp-validation-for="MoTa" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="hinh1" class="control-label"></label>
+                <input type="file" id="imageUpload1" name="hinh1" class="form-control" />
+                <img id="imagePreview1" src="#" alt="" style="display: none; width: 120px; height: 80px;" />
+            </div>
+            <div class="form-group">
+                <label for="hinh2" class="control-label"></label>
+                <input type="file" id="imageUpload2" name="hinh2" class="form-control" />
+                <img id="imagePreview2" src="#" alt="" style="display: none; width: 120px; height: 80px;" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="DienThoais" asp-action="Index">Back to List</a>
+</div>
+
+<script>
+    // Function to handle file input change
+    function handleFileSelect(event, previewId) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            var imagePreview = document.getElementById(previewId);
+            imagePreview.src = e.target.result; // Set src of image to the file data
+            imagePreview.style.display = 'block'; // Make the image visible
+        };
+
+        // Read the selected file as a data URL
+        if (event.target.files.length > 0) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
+
+    // Add event listeners for each file input
+    document.getElementById('imageUpload1').addEventListener('change', function(event) {
+        handleFileSelect(event, 'imagePreview1');
+    });
+    document.getElementById('imageUpload2').addEventListener('change', function(event) {
+        handleFileSelect(event, 'imagePreview2');
+    });
+</script>

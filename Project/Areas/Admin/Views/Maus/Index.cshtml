@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Project.Data.Mau>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<p>@TempData["Message"]</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MaMau)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TenMau)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaMau)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenMau)
+                </td>
+                <td>
+                    <a asp-controller="Maus" asp-action="Edit" asp-route-id="@item.MaMau">Edit</a> |
+                    <a asp-controller="Maus" asp-action="Delete" asp-route-id="@item.MaMau">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

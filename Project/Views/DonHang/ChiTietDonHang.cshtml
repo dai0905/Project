@@ -1,0 +1,166 @@
+﻿@model IEnumerable<Project.ViewModels.DonHangVM>
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+    var firstOrder = Model.FirstOrDefault();
+}
+
+<!--offcanvas start-->
+<div class="offcanvas offcanvas-start" id="demo" style="width: 250px;">
+    <div class="offcanvas-header">
+        <h1 class="offcanvas-title"></h1>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <nav class="navbar">
+            <div class="navbar-nav pt-4">
+                <a asp-action="ThongTinCaNhan" asp-controller="TaiKhoan" class="nav-item nav-link rounded-pill">
+                    <i class="fas fa-user fa-2x"></i>
+                    <span>Thông tin tài khoản</span>
+                </a>
+                <a asp-action="TheoDoiDonHang" asp-controller="DonHang" class="nav-item nav-link">
+                    <i class="fas fa-clipboard-list fa-2x"></i>
+                    <span>Đơn hàng</span>
+                </a>
+                <a asp-action="ThayDoiMatKhau" asp-controller="TaiKhoan" class="nav-item nav-link">
+                    <i class="fas fa-key fa-2x"></i>
+                    <span>Đổi mật khẩu</span>
+                </a>
+                <a asp-action="DangXuat" asp-controller="TaiKhoan" class="nav-item nav-link">
+                    <i class="fas fa-sign-out-alt fa-2x"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+</div>
+<!--offcanvas end-->
+
+<!--nav and content start-->
+    <div class="container-fluid row">
+        <div class="col-xl-2 d-none d-xl-block border">
+            <nav class="navbar">
+                <div class="navbar-nav py-4">
+                    <a asp-action="ThongTinCaNhan" asp-controller="TaiKhoan" class="nav-item nav-link rounded-pill">
+                        <i class="fas fa-user fa-2x"></i>
+                        <span>Thông tin tài khoản</span>
+                    </a>
+                    <a asp-action="TheoDoiDonHang" asp-controller="DonHang" class="nav-item nav-link">
+                        <i class="fas fa-clipboard-list fa-2x"></i>
+                        <span>Đơn hàng</span>
+                    </a>
+                    <a asp-action="ThayDoiMatKhau" asp-controller="TaiKhoan" class="nav-item nav-link">
+                        <i class="fas fa-key fa-2x"></i>
+                        <span>Đổi mật khẩu</span>
+                    </a>
+                    <a asp-action="DangXuat" asp-controller="TaiKhoan" class="nav-item nav-link">
+                        <i class="fas fa-sign-out-alt fa-2x"></i>
+                        <span>Đăng xuất</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+        <!-- Navigation code remains unchanged -->
+        <div class="col-xl-10">
+            <div class="container-fluid">
+                <div class="container py-5">
+                    <form asp-controller="DonHang" asp-action="ChiTietDonHang" method="get">
+                        <div class="row pb-4">
+                            <div class="form-group col-md-12 col-xl-6 px-5">
+                                <label>Đơn hàng:</label>
+                                <input class="form-control" value="@firstOrder?.MaHd" readonly>
+                            </div>
+                            <div class="form-group col-md-12 col-xl-6 px-5">
+                                <label>Ngày đặt:</label>
+                                <input class="form-control" value="@firstOrder?.NgayBan.ToString("dd/MM/yyyy")" readonly>
+                            </div>
+                        </div>
+                        <div class="row g-5">
+                            <div class="col-md-12 col-lg-6 col-xl-4">
+                                <div>
+                                    <label class="form-label my-3">Họ và tên:</label>
+                                    <input type="text" class="form-control" name="HoTen" value="@ViewBag.HoTen" readonly>
+                                </div>
+                                <div>
+                                    <label class="form-label my-3">Địa chỉ nhận hàng:</label>
+                                    <input type="text" class="form-control" name="DiaChi" value="@ViewBag.DiaChi" readonly>
+                                </div>
+                                <div>
+                                    <label class="form-label my-3">Số điện thoại:</label>
+                                    <input type="text" class="form-control" name="Sdt" value="@ViewBag.Sdt" readonly>
+                                </div>
+                                <div>
+                                    <label class="form-label my-3">Phương thức thanh toán:</label>
+                                    <input type="text" class="form-control" value="thanh toán khi nhận hàng" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 col-lg-6 col-xl-8">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" style="min-width: 100px;">Sản phẩm</th>
+                                                <th scope="col" style="min-width: 200px;">Tên điện thoại</th>
+                                                <th scope="col" style="min-width: 100px;">Giá</th>
+                                                <th scope="col" style="min-width: 100px;">Số lượng</th>
+                                                <th scope="col" style="min-width: 100px;">Thành tiền</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="d-flex align-items-center mt-2">
+                                                            <img src="@Url.Content("~/img/" + (item.HinhAnh ?? "a35_den.jpg"))" class="img-fluid" style="width: 120px; height: 80px;" alt="Ảnh sản phẩm">
+                                                        </div>
+                                                    </th>
+                                                    <td>
+                                                        <div>
+                                                            <p class="mb-0 mt-3">@item.TenSp</p>
+                                                            <p>@item.Mau @item.DungLuongRam / @item.DungLuong</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-5">@($"{item.Gia:N0} Đ")</td>
+                                                    <td class="py-5 text-center">@item.SoLuong</td>
+                                                    <td class="py-5">@($"{item.ThanhTien:N0} Đ")</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row pt-4">
+                            <div class="col-md-12 col-xl-6 pe-5">
+                                <div class="form-group">
+                                    <label>Trạng thái đơn hàng:</label>
+                                    <input class="form-control" value="@firstOrder?.TrangThai" readonly> <!-- Dynamic status -->
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xl-6 bg-light rounded">
+                                <div class="p-4">
+                                    <div class="d-flex justify-content-between mb-4">
+                                        <h5 class="mb-0 me-4">Tạm tính:</h5>
+                                        <p class="mb-0">@($"{Model.Sum(p => p.ThanhTien):N0} Đ")</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="mb-0 me-4">Phí giao hàng:</h5>
+                                        <div>
+                                            <p class="mb-0">Miễn phí</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="py-4 border-top d-flex justify-content-between">
+                                    <h5 class="mb-0 ps-4 me-4">Tổng tiền:</h5>
+                                    <p class="mb-0 pe-4">@($"{Model.Sum(p => p.ThanhTien):N0} Đ")</p>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--nav and content end-->
