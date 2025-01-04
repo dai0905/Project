@@ -67,9 +67,10 @@ namespace Project.Areas.Admin.Controllers
                                    Gia = ct.Gia,
                                    HinhAnh = ct.MaSpNavigation.HinhAnh ?? "",
                                    TrangThai = hd.MaTrangThaiNavigation.TenTrangThai,
-                                   HoTen = hd.MaTaiKhoanNavigation.Ten,
-                                   DiaChi = hd.MaTaiKhoanNavigation.DiaChi,
-                                   SDT = hd.MaTaiKhoanNavigation.Sdt
+                                   HoTen = hd.Ten,
+                                   DiaChi = hd.DiaChi,
+                                   SDT = hd.Sdt,
+                                   PTThanhToan = hd.PTThanhToan
                                };
             
             return View(orderDetails);

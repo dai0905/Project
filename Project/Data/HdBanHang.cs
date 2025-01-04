@@ -14,6 +14,7 @@ public partial class HdBanHang
     public string Sdt { get; set; } = null!;
 
     public string DiaChi { get; set; } = null!;
+    public string PTThanhToan { get; set; } = null!;
 
     public DateTime NgayBan { get; set; }
 

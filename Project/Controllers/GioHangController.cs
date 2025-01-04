@@ -4,15 +4,19 @@ using Project.ViewModels;
 using Project.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Project.Services;
 
 namespace Project.Controllers
 {
     public class GioHangController : Controller
     {
         private readonly ProjectContext db;
-        public GioHangController(ProjectContext context)
+        private readonly IVnPayService _vnPayService;
+
+        public GioHangController(ProjectContext context, IVnPayService vnPayService)
         {
             db = context;
+            _vnPayService = vnPayService;
         }
 
         const string GIOHANG_KEY = "GIOHANGCUATOI";
@@ -147,7 +151,7 @@ namespace Project.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult ThanhToan(string HoTen, string DiaChi, string DienThoai, List<GioHangItem> items)
+        public IActionResult ThanhToan(string HoTen, string DiaChi, string DienThoai, List<GioHangItem> items, string payment = "ĐẶT HÀNG (COD)")
         {
             if (items == null || items.Count == 0)
             {
@@ -169,16 +173,26 @@ namespace Project.Controllers
                 return RedirectToAction("Index"); // Chuyển hướng nếu giỏ hàng trống
             }
 
+            // Thanh toán VNPay
+            if (payment == "Thanh toán VNPay")
+            {
+                var vnPayModel = new VnPaymentRequestModel
+                {
+                    Amount = (double)GioHang.Sum(p => p.SoLuong * p.Gia),
+                    CreatedDate = DateTime.Now,
+                    Description = $"{HoTen} {DienThoai}",
+                    FullName = HoTen,
+                    OrderId = new Random().Next(1000, 10000)
+                };
+                return Redirect(_vnPayService.CreatePaymentUrl(HttpContext, vnPayModel));
+            }
+
+
             using var transaction = db.Database.BeginTransaction();
             try
             {
-                // Lấy mã hóa đơn lớn nhất và tạo mã mới
-                var lastMaHd = db.HdBanHangs
-                    .OrderByDescending(h => h.MaHd)
-                    .Select(h => h.MaHd)
-                    .FirstOrDefault();
 
-                string newMaHd = string.IsNullOrEmpty(lastMaHd) ? "HD001" : $"HD{(int.Parse(lastMaHd.Substring(2)) + 1):D3}";
+                string newMaHd = DateTime.Now.ToString("HHmmssddMMyyyy");
 
                 // Tính tổng tiền
                 decimal tongTien = gioHang.Sum(item => item.Gia * item.SoLuong);
@@ -193,7 +207,8 @@ namespace Project.Controllers
                     DiaChi = DiaChi,
                     NgayBan = DateTime.Now,
                     TongTien = tongTien,
-                    MaTrangThai = "TT001" // Trạng thái mặc định: Đang chờ xử lý
+                    MaTrangThai = "TT001", // Trạng thái mặc định: Đang chờ xử lý
+                    PTThanhToan = "Thanh toán khi nhận hàng (COD)"
                 };
 
                 db.HdBanHangs.Add(hdBanHang);
@@ -229,6 +244,96 @@ namespace Project.Controllers
                 // Xóa giỏ hàng sau khi thanh toán thành công
                 HttpContext.Session.Remove(MySetting.GIOHANG_KEY);
 
+                return RedirectToAction("TheoDoiDonHang", "DonHang"); // Chuyển hướng đến trang theo dõi đơn hàng sau khi thanh toán thành công
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                TempData["ErrorMessage"] = $"Đã xảy ra lỗi: {ex.Message}";
+                return RedirectToAction("Index"); // Nếu có lỗi, rollback và hiển thị thông báo lỗi
+            }
+        }
+
+        [Authorize]
+        public IActionResult PaymentFail()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult PaymentCallBack()
+        {
+            var response = _vnPayService.PaymentExecute(Request.Query);
+            
+
+            if(response == null || response.VnPayResponseCode != "00")
+            {
+                TempData["Message"] = $"Lỗi thanh toán VNPay: {response.VnPayResponseCode}";
+                return RedirectToAction("PaymentFail");
+            }
+
+
+            //lưu đơn hàng vô database
+            var gioHang = GioHang;
+            var userId = User.Identity?.Name;
+            var tk = db.TaiKhoans.Find(userId);
+            using var transaction = db.Database.BeginTransaction();
+            try
+            {
+
+                string newMaHd = response.OrderId;
+
+                // Tính tổng tiền
+                decimal tongTien = gioHang.Sum(item => item.Gia * item.SoLuong);
+
+                // Tạo hóa đơn mới
+                var hdBanHang = new HdBanHang
+                {
+                    MaHd = newMaHd,
+                    MaTaiKhoan = userId,
+                    Ten = tk.Ten,
+                    Sdt = tk.Sdt,
+                    DiaChi = tk.DiaChi,
+                    NgayBan = DateTime.Now,
+                    TongTien = tongTien,
+                    MaTrangThai = "TT001", // Trạng thái mặc định: Đang chờ xử lý
+                    PTThanhToan = "VNPay"
+                };
+
+                db.HdBanHangs.Add(hdBanHang);
+                db.SaveChanges();
+
+                // Thêm chi tiết hóa đơn
+                foreach (var item in gioHang)
+                {
+                    var dienThoai = db.DienThoais.FirstOrDefault(dt => dt.MaSp == item.MaSp);
+                    if (dienThoai == null || dienThoai.Sl < item.SoLuong)
+                    {
+                        TempData["ErrorMessage"] = $"Sản phẩm {item.TenSp} không còn đủ hàng.";
+                        transaction.Rollback();
+                        return RedirectToAction("Index"); // Nếu không đủ hàng, rollback và hiển thị thông báo lỗi
+                    }
+
+                    db.CtHdBanHangs.Add(new CtHdBanHang
+                    {
+                        MaHd = newMaHd,
+                        MaSp = item.MaSp,
+                        Gia = item.Gia,
+                        SoLuong = item.SoLuong
+                    });
+
+                    // Cập nhật tồn kho
+                    dienThoai.Sl -= item.SoLuong;
+                    db.DienThoais.Update(dienThoai);
+                }
+
+                db.SaveChanges();
+                transaction.Commit();
+
+                // Xóa giỏ hàng sau khi thanh toán thành công
+                HttpContext.Session.Remove(MySetting.GIOHANG_KEY);
+
+                TempData["Message"] = $"Thanh toán VNPay thành công";
                 return RedirectToAction("TheoDoiDonHang", "DonHang"); // Chuyển hướng đến trang theo dõi đơn hàng sau khi thanh toán thành công
             }
             catch (Exception ex)

@@ -181,6 +181,9 @@ public partial class ProjectContext : DbContext
             entity.Property(e => e.DiaChi)
                 .HasMaxLength(255);
 
+            entity.Property(e => e.PTThanhToan)
+                .HasMaxLength(100);
+
             entity.Property(e => e.MaTaiKhoan)
                 .HasMaxLength(50);
 

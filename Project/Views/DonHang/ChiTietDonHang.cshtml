@@ -79,19 +79,19 @@
                             <div class="col-md-12 col-lg-6 col-xl-4">
                                 <div>
                                     <label class="form-label my-3">Họ và tên:</label>
-                                    <input type="text" class="form-control" name="HoTen" value="@ViewBag.HoTen" readonly>
+                                <input type="text" class="form-control" name="HoTen" value="@firstOrder.HoTen" readonly>
                                 </div>
                                 <div>
                                     <label class="form-label my-3">Địa chỉ nhận hàng:</label>
-                                    <input type="text" class="form-control" name="DiaChi" value="@ViewBag.DiaChi" readonly>
+                                <input type="text" class="form-control" name="DiaChi" value="@firstOrder.DiaChi" readonly>
                                 </div>
                                 <div>
                                     <label class="form-label my-3">Số điện thoại:</label>
-                                    <input type="text" class="form-control" name="Sdt" value="@ViewBag.Sdt" readonly>
+                                <input type="text" class="form-control" name="Sdt" value="@firstOrder.SDT" readonly>
                                 </div>
                                 <div>
                                     <label class="form-label my-3">Phương thức thanh toán:</label>
-                                    <input type="text" class="form-control" value="thanh toán khi nhận hàng" readonly>
+                                    <input type="text" class="form-control" value="@firstOrder.PTThanhToan" readonly>
                                 </div>
                             </div>
 

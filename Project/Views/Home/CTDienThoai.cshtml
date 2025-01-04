@@ -31,9 +31,10 @@
                     <p class="ms-4"><del>@($"{Model.GiaCu:N0} Đ")</del></p>
                 </div>
 
-                <p>Màu:</p>
+                
                 <form asp-controller="Home" asp-action="CTDienThoai" asp-route-ten="@Model.TenSp" method="post">
-                    <select name="maMau" class="border-0 form-select-sm bg-light me-3" onchange="this.form.submit()">
+                    <label for="m">Màu:</label>
+                    <select id="m" name="maMau" class="border-0 form-select-sm bg-light me-3" onchange="this.form.submit()">
                         @foreach (var item in ViewBag.Mau)
                         {
                             <option value="@item.Value" selected="@(Model.maMau == item.Value )">@item.Text</option>
@@ -41,9 +42,10 @@
                     </select>
                 </form>
 
-                <p>Phiên bản:</p>
+                
                 <form asp-controller="Home" asp-action="CTDienThoai" asp-route-ten="@Model.TenSp" asp-route-maMau="@Model.maMau" asp-route-ram="1" asp-route-rom="1" method="post">
-                    <select name="ramRom" class="border-0 form-select-sm bg-light me-3" onchange="this.form.submit()">
+                    <label for="pb">Phiên bản:</label>
+                    <select id="pb" name="ramRom" class="border-0 form-select-sm bg-light me-3" onchange="this.form.submit()">
                         @foreach (var item in ViewBag.RamRomList)
                         {
                             <option value="@item.Value" selected="@(ViewBag.SelectedRamRom == item.Value )">@item.Text</option>
@@ -51,8 +53,6 @@
                     </select>
                 </form>
 
-                @* <p>Màu sắc: @Model.Mau</p>
-                <p>Phiên bản: @Model.DungLuongRam / @Model.DungLuong</p> *@
                 <p><i class="fas fa-box-open"></i> Trong hộp có: Sạc, Sách hướng dẫn, Cây lấy sim</p>
                 <p><i class="fas fa-shield-alt"></i> Bảo hành chính hãng 12 tháng.</p>
                 <p><i class="fas fa-exchange-alt"></i> 1 đổi 1 trong 1 tháng nếu lỗi từ nhà sản xuất</p>
