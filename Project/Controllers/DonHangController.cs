@@ -76,7 +76,11 @@ namespace Project.Controllers
                                        SoLuong = ct.SoLuong,
                                        Gia = ct.Gia,
                                        HinhAnh = ct.MaSpNavigation.HinhAnh ?? "",
-                                       TrangThai = hd.MaTrangThaiNavigation.TenTrangThai
+                                       TrangThai = hd.MaTrangThaiNavigation.TenTrangThai,
+                                       HoTen = hd.Ten,
+                                       DiaChi = hd.DiaChi,
+                                       SDT = hd.Sdt,
+                                       PTThanhToan = hd.PTThanhToan
                                    };
 
 

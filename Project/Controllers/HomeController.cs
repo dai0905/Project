@@ -113,7 +113,7 @@ namespace Project.Controllers
 
         public IActionResult CTDienThoai(string? ten, string? maMau, string? ram, string? rom, IFormCollection? form)
         {
-            var test1 = (from dt in db.DienThoais
+            var maus = (from dt in db.DienThoais
                         join mau in db.Maus on dt.MaMau equals mau.MaMau
                         where dt.TenSp == ten
                         select new
@@ -121,10 +121,10 @@ namespace Project.Controllers
                             MaMau = mau.MaMau,
                             TenMau = mau.TenMau
                         }).Distinct().ToList();
-            //var test2 = test1.ToList();
-            ViewBag.Mau = new SelectList(test1, "MaMau", "TenMau");
+            
+            ViewBag.Mau = new SelectList(maus, "MaMau", "TenMau");
 
-            var test2 = (from dt in db.DienThoais
+            var dungluongs = (from dt in db.DienThoais
                         join ram1 in db.Rams on dt.MaRam equals ram1.MaRam
                         join rom1 in db.BoNhoTrongs on dt.MaBoNhoTrong equals rom1.MaBoNhoTrong
                         where dt.TenSp == ten && dt.MaMau == maMau
@@ -135,8 +135,8 @@ namespace Project.Controllers
                             MaRom = rom1.MaBoNhoTrong,
                             TenRom = rom1.DungLuong,
                         }).Distinct().ToList();
-            //var test4 = test3.ToList();
-            ViewBag.RamRomList = test2.Select(x =>
+            
+            ViewBag.RamRomList = dungluongs.Select(x =>
                 new
                 {
                     Value = $"{x.MaRam}-{x.MaRom}", // Giá trị kết hợp sẽ được gửi  

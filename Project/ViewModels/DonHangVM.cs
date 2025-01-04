@@ -16,6 +16,7 @@
         public decimal? ThanhTien => Gia * SoLuong;
         public decimal TongTien;
         public string TrangThai { get; set; } = null!;
+        public string PTThanhToan { get; set; }
 
         //thêm ở đơn hàng admin
         public string? HoTen {  get; set; }
