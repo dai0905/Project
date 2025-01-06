@@ -155,6 +155,12 @@ namespace Project.Controllers
         [HttpPost]
         public async Task<IActionResult> ThanhToan(string HoTen, string DiaChi, string DienThoai, List<GioHangItem> items, string payment = "ĐẶT HÀNG (COD)")
         {
+            if(HoTen == "Chưa có" || DiaChi == "Chưa có" || DienThoai == "Chưa có")
+            {
+                TempData["ErrorMessage"] = "Vui lòng điền đủ thông tin";
+                return RedirectToAction("SuaThongTin", "TaiKhoan");
+            }
+
             if (items == null || items.Count == 0)
             {
                 TempData["ErrorMessage"] = "Giỏ hàng của bạn trống!";

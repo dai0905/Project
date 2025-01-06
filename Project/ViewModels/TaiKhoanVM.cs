@@ -21,6 +21,12 @@ namespace Project.ViewModels
         [Display(Name = "Số điện thoại")]
         [RegularExpression(@"0[98753]\d{8}", ErrorMessage = "Chưa đúng định dạng số điện thoại")]
         public string Sdt { get; set; }
+
+        [Display(Name = "Email")]
+        [Required(ErrorMessage = "Chưa nhập email")]
+        [EmailAddress(ErrorMessage = "Chưa đúng định dạng email")]
+        public string Email { get; set; } = null!;
+
         [Display(Name = "Địa chỉ")]
         [Required(ErrorMessage = "*")]
         [MaxLength(100, ErrorMessage = "Tối đa 100 kí tự")]

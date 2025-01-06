@@ -15,5 +15,10 @@ namespace Project.ViewModels
         [Required(ErrorMessage = "*")]
         [MaxLength(100, ErrorMessage = "Tối đa 100 kí tự")]
         public string DiaChi { get; set; }
+
+        [Display(Name = "Email")]
+        [Required(ErrorMessage = "Chưa nhập email")]
+        [EmailAddress(ErrorMessage = "Chưa đúng định dạng email")]
+        public string Email { get; set; }
     }
 }
