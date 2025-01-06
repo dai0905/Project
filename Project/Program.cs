@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Project.Data;
@@ -28,15 +29,33 @@ builder.Services.AddSession(options =>
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 // Add Authentication service
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/TaiKhoan/DangNhap";
-        options.AccessDeniedPath = "/AccessDenied";
-    });
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//    .AddCookie(options =>
+//    {
+//        options.LoginPath = "/TaiKhoan/DangNhap";
+//        options.AccessDeniedPath = "/AccessDenied";
+//    });
 
 builder.Services.AddSingleton<IVnPayService, VnPayService>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+//Configuration Login Google Account
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+.AddCookie(options =>
+{
+    options.LoginPath = "/TaiKhoan/DangNhap";
+    options.AccessDeniedPath = "/AccessDenied";
+})
+.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+{
+    options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+    options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+});
 
 var app = builder.Build();
 
@@ -64,7 +83,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}"
+    pattern: "{controller=TaiKhoan}/{action=DangNhap}/{id?}"
 );
 
 app.MapControllerRoute(

@@ -9,6 +9,7 @@ using AutoMapper;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace Project.Controllers
 {
@@ -114,12 +115,84 @@ namespace Project.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home"); // Chuyển hướng đến trang chủ  
+                        // Chuyển hướng đến ReturnUrl hoặc trang chủ
+                        return Redirect(ReturnUrl ?? Url.Action("Index", "Home"));
                     }
                 }
             }
             return View(model);
         }
+
+        //Login Google
+        public async Task LoginByGoogle()
+        {
+            await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme,
+                new AuthenticationProperties
+                {
+                    RedirectUri = Url.Action("GoogleResponse")
+                });
+        }
+
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            
+
+            // Lấy thông tin claim từ Google  
+            var emailClaim = result.Principal.FindFirst(ClaimTypes.Email);
+            var fullName = result.Principal.FindFirst(ClaimTypes.Name)?.Value;
+            if (emailClaim == null)
+            {
+                // Nếu không có email thì trả về lỗi hoặc redirect  
+                ModelState.AddModelError(string.Empty, "Không thể xác thực tài khoản Google.");
+                return RedirectToAction("DangNhap", "TaiKhoan");
+            }
+
+            string email = emailClaim.Value;
+
+            // Truy vấn tài khoản từ cơ sở dữ liệu dựa trên email  
+            var taiKhoan = await db.TaiKhoans.FirstOrDefaultAsync(tk => tk.MaTaiKhoan == email);
+
+            if (taiKhoan == null)
+            {
+                // Tạo tài khoản mới nếu chưa tồn tại  
+                taiKhoan = new TaiKhoan
+                {
+                    MaTaiKhoan = email, 
+                    MatKhau = "123456", 
+                    MaQuyen = 2, // Quyền customer
+                    Ten = fullName ?? "Chưa có",
+                    Sdt = "Chưa có",
+                    DiaChi = "Chưa có",
+                    Email = email,
+                };
+
+                // Thêm vào db và lưu thay đổi  
+                await db.TaiKhoans.AddAsync(taiKhoan);
+                await db.SaveChangesAsync();
+            }
+
+            // Thiết lập thông tin xác thực người dùng  
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, taiKhoan.MaTaiKhoan),
+                new Claim(ClaimTypes.Role, taiKhoan.MaQuyen.ToString() ?? "2") // Thêm vai trò  
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+            if (taiKhoan.MaQuyen == 1)
+            {
+                return RedirectToAction("Index", "DonHangs", new { Area = "admin" }); // Chuyển hướng đến trang admin  
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
         [Authorize]
         public IActionResult ThongTinCaNhan()
         {
@@ -145,7 +218,8 @@ namespace Project.Controllers
                 MatKhau = taiKhoan.MatKhau,
                 Ten = taiKhoan.Ten,
                 Sdt = taiKhoan.Sdt,
-                DiaChi = taiKhoan.DiaChi
+                DiaChi = taiKhoan.DiaChi,
+                Email = taiKhoan.Email ?? "Chưa có"
             };
 
             return View(taiKhoanVM);
@@ -183,7 +257,8 @@ namespace Project.Controllers
                 MaTaiKhoan = taiKhoan.MaTaiKhoan,
                 Ten = taiKhoan.Ten,
                 Sdt = taiKhoan.Sdt,
-                DiaChi = taiKhoan.DiaChi
+                DiaChi = taiKhoan.DiaChi,
+                Email = taiKhoan.Email
             };
 
             return View(model); // Truyền model sang View

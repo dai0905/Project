@@ -23,9 +23,12 @@
                     <input type="password" class="form-control" asp-for="MatKhau" />
                     <span asp-validation-for="MatKhau" class="text-danger"></span>
                 </div>
-                <div class="d-flex">
+                <div class="d-flex form-group">
                     <button type="submit" class="btn btn-primary w-100 me-5">Đăng Nhập</button>
                     <a asp-action="DangKy" asp-controller="TaiKhoan" class="btn btn-secondary w-100">Đăng Ký</a>
+                </div>
+                <div class="form-group">
+                    <a asp-action="LoginByGoogle" asp-controller="TaiKhoan" class="btn btn-secondary w-100">Đăng nhập bằng Google</a>
                 </div>
             </form>
         </div>
