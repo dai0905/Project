@@ -12,11 +12,13 @@ namespace Project.Controllers
     {
         private readonly ProjectContext db;
         private readonly IVnPayService _vnPayService;
+        private readonly IEmailSender _emailSender;
 
-        public GioHangController(ProjectContext context, IVnPayService vnPayService)
+        public GioHangController(ProjectContext context, IVnPayService vnPayService, IEmailSender emailSender)
         {
             db = context;
             _vnPayService = vnPayService;
+            _emailSender = emailSender;
         }
 
         const string GIOHANG_KEY = "GIOHANGCUATOI";
@@ -151,7 +153,7 @@ namespace Project.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult ThanhToan(string HoTen, string DiaChi, string DienThoai, List<GioHangItem> items, string payment = "ĐẶT HÀNG (COD)")
+        public async Task<IActionResult> ThanhToan(string HoTen, string DiaChi, string DienThoai, List<GioHangItem> items, string payment = "ĐẶT HÀNG (COD)")
         {
             if (items == null || items.Count == 0)
             {
@@ -244,6 +246,16 @@ namespace Project.Controllers
                 // Xóa giỏ hàng sau khi thanh toán thành công
                 HttpContext.Session.Remove(MySetting.GIOHANG_KEY);
 
+                var tk = db.TaiKhoans.FirstOrDefault(t => t.MaTaiKhoan == userId);
+                if (tk?.Email != null)
+                {
+                    var receiver = tk.Email;
+                    var subject = "Đặt hàng thành công";
+                    var message = "Đặt hàng thành công, vui lòng chờ duyệt đơn hàng nhé!";
+
+                    await _emailSender.SendEmailAsync(receiver, subject, message);
+                }
+
                 return RedirectToAction("TheoDoiDonHang", "DonHang"); // Chuyển hướng đến trang theo dõi đơn hàng sau khi thanh toán thành công
             }
             catch (Exception ex)
@@ -261,7 +273,7 @@ namespace Project.Controllers
         }
 
         [Authorize]
-        public IActionResult PaymentCallBack()
+        public async Task<IActionResult> PaymentCallBack()
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
             
@@ -332,6 +344,15 @@ namespace Project.Controllers
 
                 // Xóa giỏ hàng sau khi thanh toán thành công
                 HttpContext.Session.Remove(MySetting.GIOHANG_KEY);
+
+                if (tk.Email != null)
+                {
+                    var receiver = tk.Email;
+                    var subject = "Thanh toán thành công";
+                    var message = "Thanh toán thành công, vui lòng chờ duyệt đơn hàng nhé!";
+
+                    await _emailSender.SendEmailAsync(receiver, subject, message);
+                }
 
                 TempData["Message"] = $"Thanh toán VNPay thành công";
                 return RedirectToAction("TheoDoiDonHang", "DonHang"); // Chuyển hướng đến trang theo dõi đơn hàng sau khi thanh toán thành công

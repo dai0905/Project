@@ -260,6 +260,8 @@ public partial class ProjectContext : DbContext
             entity.Property(e => e.Sdt)
                 .HasMaxLength(15)
                 .HasColumnName("SDT");
+            entity.Property(e => e.Email)
+                .HasMaxLength(100);
             entity.Property(e => e.Ten).HasMaxLength(100);
 
             entity.HasOne(d => d.MaQuyenNavigation).WithMany(p => p.TaiKhoans)
