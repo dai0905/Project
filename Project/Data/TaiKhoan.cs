@@ -14,6 +14,7 @@ public partial class TaiKhoan
     public string Ten { get; set; } = null!;
 
     public string Sdt { get; set; } = null!;
+    public string? Email { get; set; }
 
     public string DiaChi { get; set; } = null!;
 
